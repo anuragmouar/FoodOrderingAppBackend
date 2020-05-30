@@ -1,9 +1,11 @@
 package com.upgrad.FoodOrderingApp.service.common;
 
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
+import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,5 +43,13 @@ public class Utility {
             return true;
         }
         return false;
+    }
+
+    public boolean isValidAuthorizationFormat(String[] decodedArray) throws AuthenticationFailedException {
+        if(decodedArray.length == 2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
