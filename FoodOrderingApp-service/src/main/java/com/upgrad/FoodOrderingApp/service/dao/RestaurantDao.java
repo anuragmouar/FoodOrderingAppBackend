@@ -8,15 +8,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-//This Class is created to access DB with respect to Restaurant entity
-
 @Repository
 public class RestaurantDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    //To get the list of restaurant by ratings from db
     public List<RestaurantEntity> restaurantsByRating(){
         try{
             List<RestaurantEntity> restaurantEntities = entityManager.createNamedQuery("restaurantsByRating",RestaurantEntity.class).getResultList();
@@ -26,7 +23,6 @@ public class RestaurantDao {
         }
     }
 
-    //To get restaurant by UUID from db
     public RestaurantEntity getRestaurantByUuid(String uuid) {
         try {
             RestaurantEntity restaurantEntity = entityManager.createNamedQuery("getRestaurantByUuid",RestaurantEntity.class).setParameter("uuid",uuid).getSingleResult();
@@ -36,10 +32,10 @@ public class RestaurantDao {
         }
 
     }
-    //To get the list of restaurant by name from db
+
     public List<RestaurantEntity> restaurantsByName(String restaurantName) {
         try {
-            String restaurantNameLow = "%"+restaurantName.toLowerCase()+"%"; // to make a check with lower
+            String restaurantNameLow = "%"+restaurantName.toLowerCase()+"%";
             List<RestaurantEntity> restaurantEntities = entityManager.createNamedQuery("restaurantsByName", RestaurantEntity.class).setParameter("restaurant_name_low",restaurantNameLow).getResultList();
             return restaurantEntities;
         }catch (NoResultException nre){
@@ -47,7 +43,7 @@ public class RestaurantDao {
         }
 
     }
-    //To update the restaurant in the db and return updated restaurant entity.
+
     public RestaurantEntity updateRestaurantRating(RestaurantEntity restaurantEntity) {
         entityManager.merge(restaurantEntity);
         return restaurantEntity;
