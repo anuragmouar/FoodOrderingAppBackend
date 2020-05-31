@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 /**
@@ -16,7 +17,7 @@ import java.time.ZonedDateTime;
 @NamedQueries({
         @NamedQuery(name = "getCustomerAuthByAccessToken", query = "SELECT c from CustomerAuthEntity c where c.accessToken = :access_Token"),
 })
-public class CustomerAuthEntity {
+public class CustomerAuthEntity implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
