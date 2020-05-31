@@ -1,14 +1,8 @@
 package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.common.Utility;
-import com.upgrad.FoodOrderingApp.service.dao.ItemDAO;
-import com.upgrad.FoodOrderingApp.service.dao.OrderDAO;
-import com.upgrad.FoodOrderingApp.service.dao.OrderItemDAO;
-import com.upgrad.FoodOrderingApp.service.dao.RestaurantDao;
-import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrderItemEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
-import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import com.upgrad.FoodOrderingApp.service.dao.*;
+import com.upgrad.FoodOrderingApp.service.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +19,27 @@ public class ItemService {
 
     @Autowired
     OrderDAO orderDAO;
+
     @Autowired
     Utility utility;
+
     @Autowired
     ItemDAO itemDAO;
+
     @Autowired
     RestaurantDao restaurantDao;
+
     @Autowired
     OrderItemDAO orderItemDAO;
+
+    @Autowired
+    CategoryDao categoryDao;
+
+    @Autowired
+    RestaurantItemDao restaurantItemDao;
+
+    @Autowired
+    CategoryItemDao categoryItemDao;
 
     /**
      * This service method serves get items by popularity endpoint.
@@ -66,5 +73,28 @@ public class ItemService {
             }
         }
         return sortedItemEntityList;
+    }
+
+    public List<ItemEntity> getItemsByCategoryAndRestaurant(String restaurantUuid, String categoryUuid) {
+
+        RestaurantEntity restaurantEntity = restaurantDao.getRestaurantByUuid(restaurantUuid);
+
+        CategoryEntity categoryEntity = categoryDao.getCategoryByUuid(categoryUuid);
+
+        List<RestaurantItemEntity> restaurantItemEntities = restaurantItemDao.getItemsByRestaurant(restaurantEntity);
+
+        List<CategoryItemEntity> categoryItemEntities = categoryItemDao.getItemsByCategory(categoryEntity);
+
+        List<ItemEntity> itemEntities = new LinkedList<>();
+
+        restaurantItemEntities.forEach(restaurantItemEntity -> {
+            categoryItemEntities.forEach(categoryItemEntity -> {
+                if(restaurantItemEntity.getItem().equals(categoryItemEntity.getItem())){
+                    itemEntities.add(restaurantItemEntity.getItem());
+                }
+            });
+        });
+
+        return itemEntities;
     }
 }
