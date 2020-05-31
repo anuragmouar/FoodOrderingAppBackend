@@ -17,7 +17,7 @@ public class CustomerDAO {
     private EntityManager entityManager;
 
     /**
-     *  This DAO method gets customer entity by contact number if any.
+     * This DAO method gets customer entity by contact number if any.
      *
      * @param contactNumber
      * @return existing customer entity if any
@@ -26,19 +26,45 @@ public class CustomerDAO {
         try {
             CustomerEntity customerEntity = entityManager.createNamedQuery("customerByContactNumber", CustomerEntity.class).setParameter("contact_number", contactNumber).getSingleResult();
             return customerEntity;
-        }catch(NoResultException ex) {
+        } catch (NoResultException ex) {
             return null;
         }
     }
 
     /**
-     *  This DAO method creates new customer entity.
+     * This DAO method creates new customer entity.
      *
      * @param customerEntity
      * @return new customer entity
      */
     public CustomerEntity createCustomer(CustomerEntity customerEntity) {
         entityManager.persist(customerEntity);
+        return customerEntity;
+    }
+
+    /**
+     * This DAO method gets customer entity based on UUID.
+     *
+     * @param uuid
+     * @return customer entity
+     */
+    public CustomerEntity getCustomerByUuid(String uuid) {
+        try {
+            CustomerEntity customer = entityManager.createNamedQuery("customerByUuid", CustomerEntity.class).setParameter("uuid", uuid).getSingleResult();
+            return customer;
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    /**
+     * This DAO method updates customer entity.
+     *
+     * @param customerEntity
+     * @return customer entity
+     */
+    public CustomerEntity updateCustomer(CustomerEntity customerEntity) {
+        entityManager.merge(customerEntity);
         return customerEntity;
     }
 }
