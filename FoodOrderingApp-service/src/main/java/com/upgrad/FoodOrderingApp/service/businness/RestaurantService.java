@@ -7,6 +7,7 @@ import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
+import com.upgrad.FoodOrderingApp.service.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,15 @@ public class RestaurantService {
 
     public List<RestaurantEntity> restaurantsByRating(){
         List<RestaurantEntity> restaurantEntities = restaurantDao.restaurantsByRating();
+        return restaurantEntities;
+    }
+
+    public List<RestaurantEntity> restaurantsByName(String restaurantName)throws RestaurantNotFoundException {
+        if(restaurantName == null || restaurantName ==""){
+            throw new RestaurantNotFoundException("RNF-003","Restaurant name field should not be empty");
+        }
+
+        List<RestaurantEntity> restaurantEntities = restaurantDao.restaurantsByName(restaurantName);
         return restaurantEntities;
     }
 
