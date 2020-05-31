@@ -3,6 +3,7 @@ package com.upgrad.FoodOrderingApp.service.common;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
+import com.upgrad.FoodOrderingApp.service.exception.UpdateCustomerException;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -17,9 +18,9 @@ public class Utility {
 
     public boolean isValidSignupCustomerRequest(CustomerEntity customerEntity) throws SignUpRestrictedException {
         if (customerEntity.getFirstName() == null || customerEntity.getFirstName() == ""
-            || customerEntity.getPassword() == null||customerEntity.getPassword() == ""
-            || customerEntity.getEmail() == null||customerEntity.getEmail() == ""
-            || customerEntity.getContactNumber() == null||customerEntity.getContactNumber() == "") {
+                || customerEntity.getPassword() == null || customerEntity.getPassword() == ""
+                || customerEntity.getEmail() == null || customerEntity.getEmail() == ""
+                || customerEntity.getContactNumber() == null || customerEntity.getContactNumber() == "") {
             return false;
         }
         return true;
@@ -37,8 +38,8 @@ public class Utility {
     }
 
     public boolean isValidPassword(String password) {
-        if(password.length() > 8 && password.matches("(?=.*[a-z]).*")
-                && password.matches("(?=.*[A-Z]).*")&& password.matches("(?=.*[0-9]).*")
+        if (password.length() > 8 && password.matches("(?=.*[a-z]).*")
+                && password.matches("(?=.*[A-Z]).*") && password.matches("(?=.*[0-9]).*")
                 && Pattern.compile("[^A-Za-z0-9 ]").matcher(password).find()) {
             return true;
         }
@@ -46,10 +47,27 @@ public class Utility {
     }
 
     public boolean isValidAuthorizationFormat(String[] decodedArray) throws AuthenticationFailedException {
-        if(decodedArray.length == 2) {
+        if (decodedArray.length == 2) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean isValidUpdateCustomerDetails(String firstName) throws UpdateCustomerException {
+        if (firstName == null || firstName == "") {
+            throw new UpdateCustomerException("UCR-002", "First name field should not be empty");
+        }
+        return true;
+    }
+
+    public boolean isValidCustomerPassword(String oldPassword, String newPassword) throws UpdateCustomerException {
+        if (oldPassword == null || oldPassword == "") {
+            throw new UpdateCustomerException("UCR-003", "No field should be empty");
+        }
+        if (newPassword == null || newPassword == "") {
+            throw new UpdateCustomerException("UCR-003", "No field should be empty");
+        }
+        return true;
     }
 }

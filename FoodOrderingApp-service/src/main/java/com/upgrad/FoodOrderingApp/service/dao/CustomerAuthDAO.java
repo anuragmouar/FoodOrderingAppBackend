@@ -31,13 +31,13 @@ public class CustomerAuthDAO {
      * This DAO method gets CustomerAuthEntity based on access-token.
      *
      * @param accessToken
-     * @return
+     * @return customerAuthEntity
      */
     public CustomerAuthEntity getCustomerAuthByAccessToken(String accessToken) {
-        try{
+        try {
             CustomerAuthEntity customerAuthEntity = entityManager.createNamedQuery("getCustomerAuthByAccessToken", CustomerAuthEntity.class).setParameter("access_Token", accessToken).getSingleResult();
             return customerAuthEntity;
-        }catch (NoResultException ex){
+        } catch (NoResultException ex) {
             return null;
         }
     }
@@ -46,7 +46,7 @@ public class CustomerAuthDAO {
      * This DAO method updates existing customerAuth entity.
      *
      * @param customerAuthEntity
-     * @return
+     * @return customerAuthEntity
      */
     public CustomerAuthEntity customerLogout(CustomerAuthEntity customerAuthEntity) {
         entityManager.merge(customerAuthEntity);
