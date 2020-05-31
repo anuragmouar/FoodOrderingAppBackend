@@ -94,4 +94,11 @@ public class Utility {
         Matcher m = p.matcher(cutomerRating);
         return (m.find() && m.group().equals(cutomerRating));
     }
+
+    //To Validate the Pincode
+    public boolean isPincodeValid(String pincode){
+        Pattern p = Pattern.compile("\\d{6}\\b");
+        Matcher m = p.matcher(pincode);
+        return (m.find() && m.group().equals(pincode));
+    }
 }
