@@ -1,5 +1,8 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,12 +47,21 @@ public class AddressEntity implements Serializable {
     @Column(name = "active")
     private Integer active = 1;
 
-    public AddressEntity(String uuid, String flatBuilNo, String locality, String city, String pincode) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "state_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private StateEntity state;
+
+    public AddressEntity(){
+    }
+
+    public AddressEntity(String uuid, String flatBuilNo, String locality, String city, String pincode, StateEntity stateEntity) {
         this.uuid = uuid;
         this.flatBuilNo =flatBuilNo;
         this.locality = locality;
         this.city = city;
         this.pincode = pincode;
+        this.state = stateEntity;
         return;
     }
 
@@ -107,5 +119,13 @@ public class AddressEntity implements Serializable {
 
     public void setActive(Integer active) {
         this.active = active;
+    }
+
+    public StateEntity getState() {
+        return state;
+    }
+
+    public void setState(StateEntity state) {
+        this.state = state;
     }
 }
