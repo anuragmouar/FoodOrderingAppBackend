@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
  * This entity represents customer_auth table at DB.
  */
 @Entity
-@Table(name = "customer_auth",uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
+@Table(name = "customer_auth", uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
 @NamedQueries({
         @NamedQuery(name = "getCustomerAuthByAccessToken", query = "SELECT c from CustomerAuthEntity c where c.accessToken = :access_Token"),
 })
