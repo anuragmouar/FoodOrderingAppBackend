@@ -23,11 +23,17 @@ public class Utility {
      * @throws SignUpRestrictedException if firstname/password/email/contact number is null or blank
      */
     public boolean isValidSignupCustomerRequest(CustomerEntity customerEntity) throws SignUpRestrictedException {
-        if (customerEntity.getFirstName() == null || customerEntity.getFirstName() == ""
-                || customerEntity.getPassword() == null || customerEntity.getPassword() == ""
-                || customerEntity.getEmail() == null || customerEntity.getEmail() == ""
-                || customerEntity.getContactNumber() == null || customerEntity.getContactNumber() == "") {
-            return false;
+        if (customerEntity.getFirstName() == null || customerEntity.getFirstName() == ""){
+            throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
+        }
+        if(customerEntity.getPassword() == null||customerEntity.getPassword() == ""){
+            throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
+        }
+        if (customerEntity.getEmail() == null||customerEntity.getEmail() == ""){
+            throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
+        }
+        if (customerEntity.getContactNumber() == null||customerEntity.getContactNumber() == ""){
+            throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
         }
         return true;
     }
@@ -67,11 +73,16 @@ public class Utility {
         return false;
     }
 
-    public boolean isValidAuthorizationFormat(String[] decodedArray) throws AuthenticationFailedException {
-        if (decodedArray.length == 2) {
+    public boolean isValidAuthorizationFormat(String authorization) throws AuthenticationFailedException {
+        try {
+            byte[] decoded = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
+            String decodedAuth = new String(decoded);
+            String[] decodedArray = decodedAuth.split(":");
+            String username = decodedArray[0];
+            String password = decodedArray[1];
             return true;
-        } else {
-            return false;
+        }catch (ArrayIndexOutOfBoundsException exc){
+            throw new AuthenticationFailedException("ATH-003","Incorrect format of decoded customer name and password");
         }
     }
 

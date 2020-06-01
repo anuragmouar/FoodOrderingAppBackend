@@ -82,23 +82,23 @@ public class OrderController {
         AddressEntity addressEntity = addressService.getAddressByUUID(saveOrderRequest.getAddressId(), customerEntity);
         RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(saveOrderRequest.getRestaurantId().toString());
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        OrdersEntity ordersEntity = new OrdersEntity();
-        ordersEntity.setUuid(UUID.randomUUID().toString());
-        ordersEntity.setBill(saveOrderRequest.getBill().floatValue());
-        ordersEntity.setDate(timestamp);
-        ordersEntity.setCustomer(customerEntity);
-        ordersEntity.setDiscount(saveOrderRequest.getDiscount().doubleValue());
-        ordersEntity.setPayment(paymentEntity);
-        ordersEntity.setAddress(addressEntity);
-        ordersEntity.setRestaurant(restaurantEntity);
-        ordersEntity.setCoupon(couponEntity);
-        OrdersEntity savedOrderEntity = orderService.saveOrder(ordersEntity);
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setUuid(UUID.randomUUID().toString());
+        orderEntity.setBill(saveOrderRequest.getBill().floatValue());
+        orderEntity.setDate(timestamp);
+        orderEntity.setCustomer(customerEntity);
+        orderEntity.setDiscount(saveOrderRequest.getDiscount().doubleValue());
+        orderEntity.setPayment(paymentEntity);
+        orderEntity.setAddress(addressEntity);
+        orderEntity.setRestaurant(restaurantEntity);
+        orderEntity.setCoupon(couponEntity);
+        OrderEntity savedOrderEntity = orderService.saveOrder(orderEntity);
         List<ItemQuantity> itemQuantities = saveOrderRequest.getItemQuantities();
         for (ItemQuantity itemQuantity : itemQuantities) {
             OrderItemEntity orderItemEntity = new OrderItemEntity();
             ItemEntity itemEntity = itemService.getItemByUUID(itemQuantity.getItemId().toString());
             orderItemEntity.setItem(itemEntity);
-            orderItemEntity.setOrder(ordersEntity);
+            orderItemEntity.setOrder(orderEntity);
             orderItemEntity.setPrice(itemQuantity.getPrice());
             orderItemEntity.setQuantity(itemQuantity.getQuantity());
             OrderItemEntity savedOrderItem = orderService.saveOrderItem(orderItemEntity);
@@ -121,12 +121,12 @@ public class OrderController {
     public ResponseEntity<CustomerOrderResponse> getPastOrderOfUser(@RequestHeader(value = "authorization") final String authorization) throws AuthorizationFailedException {
         String accessToken = authorization.split("Bearer ")[1];
         CustomerEntity customerEntity = customerService.getCustomer(accessToken);
-        List<OrdersEntity> ordersEntities = orderService.getOrdersByCustomers(customerEntity.getUuid());
+        List<OrderEntity> ordersEntities = orderService.getOrdersByCustomers(customerEntity.getUuid());
         List<OrderList> orderLists = new LinkedList<OrderList>();
 
         if (ordersEntities != null) {
-            for (OrdersEntity ordersEntity : ordersEntities) {
-                List<OrderItemEntity> orderItemEntities = orderService.getOrderItemsByOrder(ordersEntity);
+            for (OrderEntity orderEntity : ordersEntities) {
+                List<OrderItemEntity> orderItemEntities = orderService.getOrderItemsByOrder(orderEntity);
                 List<ItemQuantityResponse> itemQuantityResponseList = new LinkedList<>();
                 orderItemEntities.forEach(orderItemEntity -> {
                     ItemQuantityResponseItem itemQuantityResponseItem = new ItemQuantityResponseItem()
@@ -141,35 +141,35 @@ public class OrderController {
                     itemQuantityResponseList.add(itemQuantityResponse);
                 });
                 OrderListAddressState orderListAddressState = new OrderListAddressState()
-                        .id(UUID.fromString(ordersEntity.getAddress().getState().getStateUuid()))
-                        .stateName(ordersEntity.getAddress().getState().getStateName());
+                        .id(UUID.fromString(orderEntity.getAddress().getState().getStateUuid()))
+                        .stateName(orderEntity.getAddress().getState().getStateName());
                 OrderListAddress orderListAddress = new OrderListAddress()
-                        .id(UUID.fromString(ordersEntity.getAddress().getUuid()))
-                        .flatBuildingName(ordersEntity.getAddress().getFlatBuilNo())
-                        .locality(ordersEntity.getAddress().getLocality())
-                        .city(ordersEntity.getAddress().getCity())
-                        .pincode(ordersEntity.getAddress().getPincode())
+                        .id(UUID.fromString(orderEntity.getAddress().getUuid()))
+                        .flatBuildingName(orderEntity.getAddress().getFlatBuilNo())
+                        .locality(orderEntity.getAddress().getLocality())
+                        .city(orderEntity.getAddress().getCity())
+                        .pincode(orderEntity.getAddress().getPincode())
                         .state(orderListAddressState);
                 OrderListCoupon orderListCoupon = new OrderListCoupon()
-                        .couponName(ordersEntity.getCoupon().getCouponName())
-                        .id(UUID.fromString(ordersEntity.getCoupon().getUuid()))
-                        .percent(ordersEntity.getCoupon().getPercent());
+                        .couponName(orderEntity.getCoupon().getCouponName())
+                        .id(UUID.fromString(orderEntity.getCoupon().getUuid()))
+                        .percent(orderEntity.getCoupon().getPercent());
                 OrderListCustomer orderListCustomer = new OrderListCustomer()
-                        .id(UUID.fromString(ordersEntity.getCustomer().getUuid()))
-                        .firstName(ordersEntity.getCustomer().getFirstName())
-                        .lastName(ordersEntity.getCustomer().getLastName())
-                        .emailAddress(ordersEntity.getCustomer().getEmail())
-                        .contactNumber(ordersEntity.getCustomer().getContactNumber());
+                        .id(UUID.fromString(orderEntity.getCustomer().getUuid()))
+                        .firstName(orderEntity.getCustomer().getFirstName())
+                        .lastName(orderEntity.getCustomer().getLastName())
+                        .emailAddress(orderEntity.getCustomer().getEmail())
+                        .contactNumber(orderEntity.getCustomer().getContactNumber());
                 OrderListPayment orderListPayment = new OrderListPayment()
-                        .id(UUID.fromString(ordersEntity.getPayment().getUuid()))
-                        .paymentName(ordersEntity.getPayment().getPaymentName());
+                        .id(UUID.fromString(orderEntity.getPayment().getUuid()))
+                        .paymentName(orderEntity.getPayment().getPaymentName());
                 OrderList orderList = new OrderList()
-                        .id(UUID.fromString(ordersEntity.getUuid()))
+                        .id(UUID.fromString(orderEntity.getUuid()))
                         .itemQuantities(itemQuantityResponseList)
                         .address(orderListAddress)
-                        .bill(BigDecimal.valueOf(ordersEntity.getBill()))
-                        .date(String.valueOf(ordersEntity.getDate()))
-                        .discount(BigDecimal.valueOf(ordersEntity.getDiscount()))
+                        .bill(BigDecimal.valueOf(orderEntity.getBill()))
+                        .date(String.valueOf(orderEntity.getDate()))
+                        .discount(BigDecimal.valueOf(orderEntity.getDiscount()))
                         .coupon(orderListCoupon)
                         .customer(orderListCustomer)
                         .payment(orderListPayment);

@@ -49,7 +49,7 @@ public class CustomerController {
         customerEntity.setEmail(signupCustomerRequest.getEmailAddress());
         customerEntity.setPassword(signupCustomerRequest.getPassword());
         customerEntity.setUuid(UUID.randomUUID().toString());
-
+        utility.isValidSignupCustomerRequest(customerEntity);
         CustomerEntity signedupCustomer = customerService.saveCustomer(customerEntity);
         SignupCustomerResponse signupCustomerResponse = new SignupCustomerResponse().id(signedupCustomer.getUuid())
                 .status("CUSTOMER SUCCESSFULLY REGISTERED");
@@ -66,11 +66,11 @@ public class CustomerController {
     @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, path = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LoginResponse> loginCustomer(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
+        utility.isValidAuthorizationFormat(authorization);
         byte[] decoded = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
         String decodedAuth = new String(decoded);
         String[] decodedArray = decodedAuth.split(":");
-
-        CustomerAuthEntity customerAuthEntity = customerService.authenticate(decodedArray);
+        CustomerAuthEntity customerAuthEntity = customerService.authenticate(decodedArray[0], decodedArray[1]);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("access-token", customerAuthEntity.getAccessToken());

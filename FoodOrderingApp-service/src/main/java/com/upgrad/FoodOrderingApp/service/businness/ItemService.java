@@ -49,9 +49,9 @@ public class ItemService {
      * @return list of item entity
      */
     public List<ItemEntity> getItemsByPopularity(RestaurantEntity restaurantEntity) {
-        List <OrdersEntity> ordersEntityList = orderDAO.getOrdersByRestaurant(restaurantEntity);
+        List <OrderEntity> orderEntityList = orderDAO.getOrdersByRestaurant(restaurantEntity);
         List <ItemEntity> itemEntityList = new LinkedList<>();
-        ordersEntityList.forEach(ordersEntity -> {
+        orderEntityList.forEach(ordersEntity -> {
             List <OrderItemEntity> orderItemEntityList = orderItemDAO.getItemsByOrders(ordersEntity);
             orderItemEntityList.forEach(orderItemEntity -> {
                 itemEntityList.add(orderItemEntity.getItem());

@@ -110,7 +110,7 @@ public class AddressService {
     @Transactional(propagation = Propagation.REQUIRED)
     public AddressEntity deleteAddress(AddressEntity addressEntity) {
 
-        List<OrdersEntity> ordersEntities = orderDao.getOrdersByAddress(addressEntity);
+        List<OrderEntity> ordersEntities = orderDao.getOrdersByAddress(addressEntity);
 
         if (ordersEntities == null || ordersEntities.isEmpty()) {
             AddressEntity deletedAddressEntity = addressDao.deleteAddress(addressEntity);

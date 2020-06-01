@@ -41,8 +41,27 @@ public class CustomerService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
-        validateCustomerEntity(customerEntity);
+        CustomerEntity existingCustomerEntity = customerDAO.getCustomerByContactNumber(customerEntity.getContactNumber());
 
+        if (existingCustomerEntity != null) {//Checking if Customer already Exists if yes throws exception.
+            throw new SignUpRestrictedException("SGR-001", "This contact number is already registered! Try other contact number");
+        }
+
+        if (!utility.isValidSignupCustomerRequest(customerEntity)) {//Checking if is Valid Signup Request.
+            throw new SignUpRestrictedException("SGR-005", "Except last name all fields should be filled");
+        }
+
+        if (!utility.isValidEmailIDFormat(customerEntity.getEmail())) {//Checking if email is valid
+            throw new SignUpRestrictedException("SGR-002", "Invalid email-id format!");
+        }
+
+        if (!utility.isValidContactNumber(customerEntity.getContactNumber())) {//Checking if Contact is valid
+            throw new SignUpRestrictedException("SGR-003", "Invalid contact number!");
+        }
+
+        if (!utility.isValidPassword(customerEntity.getPassword())) {//Checking if Password is valid.
+            throw new SignUpRestrictedException("SGR-004", "Weak password!");
+        }
         String[] encryptedPassword = passwordCryptographyProvider.encrypt(customerEntity.getPassword());
         customerEntity.setSalt(encryptedPassword[0]);
         customerEntity.setPassword(encryptedPassword[1]);
@@ -51,39 +70,15 @@ public class CustomerService {
         return newCustomerEntity;
     }
 
-    private void validateCustomerEntity(CustomerEntity customerEntity) throws SignUpRestrictedException {
-        if (customerEntity.getContactNumber() != null || customerEntity.getContactNumber() != "") {
-            CustomerEntity existingCustomerEntity = customerDAO.getCustomerByContactNumber(customerEntity.getContactNumber());
-            if (existingCustomerEntity != null) {
-                throw new SignUpRestrictedException("SGR-001", "This contact number is already registered! Try other contact number");
-            }
-        }
-        if (!utility.isValidSignupCustomerRequest(customerEntity)) {
-            throw new SignUpRestrictedException("SGR-005", "Except last name all fields should be filled");
-        }
-        if (!utility.isValidEmailIDFormat(customerEntity.getEmail())) {
-            throw new SignUpRestrictedException("SGR-002", "Invalid email-id format!");
-        }
-        if (!utility.isValidContactNumber(customerEntity.getContactNumber())) {
-            throw new SignUpRestrictedException("SGR-003", "Invalid contact number!");
-        }
-        if (utility.isValidPassword(customerEntity.getPassword())) {
-            throw new SignUpRestrictedException("SGR-004", "Weak password!");
-        }
-    }
-
     /**
      * This service method provides service to customer login endpoint.
      *
-     * @param decodedArray
+     * @param contactNumber,password
      * @return authorized customer entity
      * @throws AuthenticationFailedException
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public CustomerAuthEntity authenticate(String[] decodedArray) throws AuthenticationFailedException {
-        if (utility.isValidAuthorizationFormat(decodedArray)) {
-            String contactNumber = decodedArray[0];
-            String password = decodedArray[1];
+    public CustomerAuthEntity authenticate(String contactNumber, String password) throws AuthenticationFailedException {
 
             CustomerEntity customerEntity = customerDAO.getCustomerByContactNumber(contactNumber);
             if (customerEntity == null) {
@@ -109,9 +104,7 @@ public class CustomerService {
             } else {
                 throw new AuthenticationFailedException("ATH-002", "Invalid Credentials");
             }
-        } else {
-            throw new AuthenticationFailedException("ATH-003", "Incorrect format of decoded customer name and password");
-        }
+
     }
 
     /**

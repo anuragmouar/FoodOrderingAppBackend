@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NamedQueries({
 
         @NamedQuery(name = "getOrderItemsByOrder",query = "SELECT o FROM OrderItemEntity o WHERE o.order = :orders ORDER BY LOWER(o.item.itemName) ASC"),
-        @NamedQuery(name = "getItemsByOrders",query = "SELECT o FROM OrderItemEntity o WHERE o.order = :ordersEntity"),
+        @NamedQuery(name = "getItemsByOrders",query = "SELECT o FROM OrderItemEntity o WHERE o.order = :orderEntity"),
 
 })
 public class OrderItemEntity implements Serializable {
@@ -28,7 +28,7 @@ public class OrderItemEntity implements Serializable {
     @JoinColumn(name = "order_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private OrdersEntity order;
+    private OrderEntity order;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id")
@@ -51,11 +51,11 @@ public class OrderItemEntity implements Serializable {
         this.id = id;
     }
 
-    public OrdersEntity getOrder() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrder(OrdersEntity order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
 

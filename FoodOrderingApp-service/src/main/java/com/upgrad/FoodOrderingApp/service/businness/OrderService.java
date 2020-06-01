@@ -7,7 +7,7 @@ import com.upgrad.FoodOrderingApp.service.dao.OrderItemDAO;
 import com.upgrad.FoodOrderingApp.service.entity.CouponEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.entity.OrderItemEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
+import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import com.upgrad.FoodOrderingApp.service.exception.CouponNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,12 +67,12 @@ public class OrderService {
     /**
      * This method serves Order endpoint to save order.
      *
-     * @param ordersEntity
+     * @param orderEntity
      * @return Order
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public OrdersEntity saveOrder(OrdersEntity ordersEntity) {
-        OrdersEntity savedOrderEntity = orderDao.saveOrder(ordersEntity);
+    public OrderEntity saveOrder(OrderEntity orderEntity) {
+        OrderEntity savedOrderEntity = orderDao.saveOrder(orderEntity);
         return savedOrderEntity;
     }
 
@@ -94,20 +94,20 @@ public class OrderService {
      * @param uuid
      * @return List of order
      */
-    public List<OrdersEntity> getOrdersByCustomers(String uuid) {
+    public List<OrderEntity> getOrdersByCustomers(String uuid) {
         CustomerEntity customerEntity = customerDao.getCustomerByUuid(uuid);
-        List<OrdersEntity> ordersEntities = orderDao.getOrdersByCustomers(customerEntity);
+        List<OrderEntity> ordersEntities = orderDao.getOrdersByCustomers(customerEntity);
         return ordersEntities;
     }
 
     /**
      * This method serves Order item endpoint.
      *
-     * @param ordersEntity
+     * @param orderEntity
      * @return list of order entity.
      */
-    public List<OrderItemEntity> getOrderItemsByOrder(OrdersEntity ordersEntity) {
-        List<OrderItemEntity> orderItemEntities = orderItemDao.getOrderItemsByOrder(ordersEntity);
+    public List<OrderItemEntity> getOrderItemsByOrder(OrderEntity orderEntity) {
+        List<OrderItemEntity> orderItemEntities = orderItemDao.getOrderItemsByOrder(orderEntity);
         return orderItemEntities;
     }
 }
