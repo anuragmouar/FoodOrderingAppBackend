@@ -16,6 +16,12 @@ import java.util.regex.Pattern;
 @Component
 public class Utility {
 
+    /**
+     * Validates signup request for customer
+     * @param customerEntity
+     * @return true if validation passes else false
+     * @throws SignUpRestrictedException if firstname/password/email/contact number is null or blank
+     */
     public boolean isValidSignupCustomerRequest(CustomerEntity customerEntity) throws SignUpRestrictedException {
         if (customerEntity.getFirstName() == null || customerEntity.getFirstName() == ""
                 || customerEntity.getPassword() == null || customerEntity.getPassword() == ""
@@ -26,17 +32,32 @@ public class Utility {
         return true;
     }
 
+    /**
+     * Validates email id
+     * @param email
+     * @return true if validation passes else false
+     */
     public boolean isValidEmailIDFormat(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
     }
 
+    /**
+     * Validates contact number
+     * @param contactNumber
+     * @return true if validation passes else false
+     */
     public boolean isValidContactNumber(String contactNumber) {
         Pattern p = Pattern.compile("^\\d{10}$");
         Matcher m = p.matcher(contactNumber);
         return (m.find() && m.group().equals(contactNumber));
     }
 
+    /**
+     * Validates password provided
+     * @param password
+     * @return true if validation passes else false
+     */
     public boolean isValidPassword(String password) {
         if (password.length() > 8 && password.matches("(?=.*[a-z]).*")
                 && password.matches("(?=.*[A-Z]).*") && password.matches("(?=.*[0-9]).*")
@@ -54,6 +75,12 @@ public class Utility {
         }
     }
 
+    /**
+     * Validates customer details provided
+     * @param firstName
+     * @return true if validation passes else false
+     * @throws UpdateCustomerException
+     */
     public boolean isValidUpdateCustomerDetails(String firstName) throws UpdateCustomerException {
         if (firstName == null || firstName == "") {
             throw new UpdateCustomerException("UCR-002", "First name field should not be empty");
@@ -61,6 +88,13 @@ public class Utility {
         return true;
     }
 
+    /**
+     * Validates password entered by customer
+     * @param oldPassword
+     * @param newPassword
+     * @return true if validation passes else false
+     * @throws UpdateCustomerException if old/new password is null or blank
+     */
     public boolean isValidCustomerPassword(String oldPassword, String newPassword) throws UpdateCustomerException {
         if (oldPassword == null || oldPassword == "") {
             throw new UpdateCustomerException("UCR-003", "No field should be empty");
@@ -86,6 +120,11 @@ public class Utility {
         return sortedByValueMap;
     }
 
+    /**
+     * Method to validate if customer rating
+     * @param cutomerRating
+     * @return true if validation passes else false
+     */
     public boolean isValidCustomerRating(String cutomerRating){
         if(cutomerRating.equals("5.0")){
             return true;
@@ -95,7 +134,11 @@ public class Utility {
         return (m.find() && m.group().equals(cutomerRating));
     }
 
-    //To Validate the Pincode
+    /**
+     * Method to validate pincode
+     * @param pincode
+     * @return true if validation passes else false
+     */
     public boolean isPincodeValid(String pincode){
         Pattern p = Pattern.compile("\\d{6}\\b");
         Matcher m = p.matcher(pincode);
