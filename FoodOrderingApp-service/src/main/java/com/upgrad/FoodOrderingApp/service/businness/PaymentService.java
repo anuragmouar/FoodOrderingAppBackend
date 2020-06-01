@@ -23,10 +23,6 @@ public class PaymentService {
         return paymentEntity;
     }
 
-    /**
-     * Retrieve all the payment methods
-     * @return list of payment methods
-     */
     public List<PaymentEntity> getAllPaymentMethods() {
         List<PaymentEntity> paymentEntities = paymentDao.getAllPaymentMethods();
         return paymentEntities;

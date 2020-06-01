@@ -6,13 +6,15 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.io.Serializable;
 
-//This Class represents the CustomerAddress table in the DB.
+/**
+ * This Class represents the CustomerAddress table in the DB.
+ */
 
 @Entity
 @Table(name = "customer_address")
 @NamedQueries({
-        @NamedQuery(name = "getAllCustomerAddressByCustomer",query = "SELECT c from CustomerAddressEntity c where c.customer = :customer_entity AND c.address.active = :active"),
-        @NamedQuery(name = "getCustomerAddressByAddress",query = "SELECT c from CustomerAddressEntity c where c.address = :address_entity")
+    @NamedQuery(name = "getAllCustomerAddressByCustomer", query = "SELECT c from CustomerAddressEntity c where c.customer = :customer_entity AND c.address.active = :active"),
+    @NamedQuery(name = "getCustomerAddressByAddress", query = "SELECT c from CustomerAddressEntity c where c.address = :address_entity")
 })
 public class CustomerAddressEntity implements Serializable {
 
