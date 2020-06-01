@@ -3,6 +3,7 @@ package com.upgrad.FoodOrderingApp.service.businness;
 import com.upgrad.FoodOrderingApp.service.common.Utility;
 import com.upgrad.FoodOrderingApp.service.dao.*;
 import com.upgrad.FoodOrderingApp.service.entity.*;
+import com.upgrad.FoodOrderingApp.service.exception.ItemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +76,13 @@ public class ItemService {
         return sortedItemEntityList;
     }
 
+    /**
+     * This service method serves item endpoint.
+     *
+     * @param restaurantUuid
+     * @param categoryUuid
+     * @return Item Entity
+     */
     public List<ItemEntity> getItemsByCategoryAndRestaurant(String restaurantUuid, String categoryUuid) {
 
         RestaurantEntity restaurantEntity = restaurantDao.getRestaurantByUuid(restaurantUuid);
@@ -96,5 +104,20 @@ public class ItemService {
         });
 
         return itemEntities;
+    }
+
+    /**
+     *  This method serves Item endpoint.
+     *
+     * @param itemUuid
+     * @return item entity
+     * @throws ItemNotFoundException
+     */
+    public ItemEntity getItemByUUID(String itemUuid) throws ItemNotFoundException {
+        ItemEntity itemEntity = itemDAO.getItemByUUID(itemUuid);
+        if(itemEntity == null){
+            throw new ItemNotFoundException("INF-003","No item by this id exist");
+        }
+        return itemEntity;
     }
 }

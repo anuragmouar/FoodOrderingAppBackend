@@ -32,4 +32,30 @@ public class OrderItemDAO {
             return null;
         }
     }
+
+    /**
+     * This method saves order item.
+     *
+     * @param orderItemEntity
+     * @return order item
+     */
+    public OrderItemEntity saveOrderItem(OrderItemEntity orderItemEntity) {
+        entityManager.persist(orderItemEntity);
+        return orderItemEntity;
+    }
+
+    /**
+     * This method gets order items by order.
+     *
+     * @param ordersEntity
+     * @return list of order entity
+     */
+    public List<OrderItemEntity> getOrderItemsByOrder(OrdersEntity ordersEntity) {
+        try {
+            List<OrderItemEntity> orderItemEntities = entityManager.createNamedQuery("getOrderItemsByOrder",OrderItemEntity.class).setParameter("orders",ordersEntity).getResultList();
+            return orderItemEntities;
+        }catch (NoResultException nre){
+            return null;
+        }
+    }
 }
