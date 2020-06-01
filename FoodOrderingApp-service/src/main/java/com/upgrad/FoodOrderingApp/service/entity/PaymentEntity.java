@@ -5,11 +5,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+/**
+ * This Class represents the payment table in the DB
+ */
+
 @Entity
-@Table(name = "payment",uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
+@Table(name = "payment", uniqueConstraints = { @UniqueConstraint(columnNames = { "uuid" }) })
 @NamedQueries({
-    @NamedQuery(name = "getPaymentByUUID",query = "SELECT p FROM PaymentEntity p WHERE p.uuid = :uuid"),
-    @NamedQuery(name = "getAllPaymentMethods",query = "SELECT p FROM PaymentEntity p")
+    @NamedQuery(name = "getPaymentByUUID", query = "SELECT p FROM PaymentEntity p WHERE p.uuid = :uuid"),
+    @NamedQuery(name = "getAllPaymentMethods", query = "SELECT p FROM PaymentEntity p")
 })
 public class PaymentEntity implements Serializable {
     @Id
@@ -26,7 +30,7 @@ public class PaymentEntity implements Serializable {
     @Size(max = 255)
     private String paymentName;
 
-    public PaymentEntity(){
+    public PaymentEntity() {
 
     }
 

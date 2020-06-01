@@ -7,10 +7,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/**
+ * This Class represents the restaurant_item table in the DB
+ */
+
 @Entity
 @Table(name = "restaurant_item")
 @NamedQueries({
-    @NamedQuery(name = "getItemsByRestaurant",query = "SELECT r FROM RestaurantItemEntity r WHERE r.restaurant = :restaurant ORDER BY LOWER(r.item.itemName) ASC "),
+    @NamedQuery(name = "getItemsByRestaurant", query = "SELECT r FROM RestaurantItemEntity r WHERE r.restaurant = :restaurant ORDER BY LOWER(r.item.itemName) ASC "),
 })
 public class RestaurantItemEntity implements Serializable {
 
@@ -30,7 +34,6 @@ public class RestaurantItemEntity implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private RestaurantEntity restaurant;
-
 
     public Integer getId() {
         return id;

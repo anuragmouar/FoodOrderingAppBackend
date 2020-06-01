@@ -14,20 +14,20 @@ public class RestaurantDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<RestaurantEntity> restaurantsByRating(){
-        try{
-            List<RestaurantEntity> restaurantEntities = entityManager.createNamedQuery("restaurantsByRating",RestaurantEntity.class).getResultList();
+    public List<RestaurantEntity> restaurantsByRating() {
+        try {
+            List<RestaurantEntity> restaurantEntities = entityManager.createNamedQuery("restaurantsByRating", RestaurantEntity.class).getResultList();
             return restaurantEntities;
-        }catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
         }
     }
 
     public RestaurantEntity getRestaurantByUuid(String uuid) {
         try {
-            RestaurantEntity restaurantEntity = entityManager.createNamedQuery("getRestaurantByUuid",RestaurantEntity.class).setParameter("uuid",uuid).getSingleResult();
+            RestaurantEntity restaurantEntity = entityManager.createNamedQuery("getRestaurantByUuid", RestaurantEntity.class).setParameter("uuid", uuid).getSingleResult();
             return restaurantEntity;
-        }catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
         }
 
@@ -35,10 +35,10 @@ public class RestaurantDao {
 
     public List<RestaurantEntity> restaurantsByName(String restaurantName) {
         try {
-            String restaurantNameLow = "%"+restaurantName.toLowerCase()+"%";
-            List<RestaurantEntity> restaurantEntities = entityManager.createNamedQuery("restaurantsByName", RestaurantEntity.class).setParameter("restaurant_name_low",restaurantNameLow).getResultList();
+            String restaurantNameLow = "%" + restaurantName.toLowerCase() + "%";
+            List<RestaurantEntity> restaurantEntities = entityManager.createNamedQuery("restaurantsByName", RestaurantEntity.class).setParameter("restaurant_name_low", restaurantNameLow).getResultList();
             return restaurantEntities;
-        }catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
         }
 
