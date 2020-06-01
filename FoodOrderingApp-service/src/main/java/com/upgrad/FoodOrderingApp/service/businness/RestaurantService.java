@@ -34,14 +34,14 @@ public class RestaurantService {
     @Autowired
     Utility utility;
 
-    public List<RestaurantEntity> restaurantsByRating(){
+    public List<RestaurantEntity> restaurantsByRating() {
         List<RestaurantEntity> restaurantEntities = restaurantDao.restaurantsByRating();
         return restaurantEntities;
     }
 
-    public List<RestaurantEntity> restaurantsByName(String restaurantName)throws RestaurantNotFoundException {
-        if(restaurantName == null || restaurantName ==""){
-            throw new RestaurantNotFoundException("RNF-003","Restaurant name field should not be empty");
+    public List<RestaurantEntity> restaurantsByName(String restaurantName) throws RestaurantNotFoundException {
+        if (restaurantName == null || restaurantName == "") {
+            throw new RestaurantNotFoundException("RNF-003", "Restaurant name field should not be empty");
         }
 
         List<RestaurantEntity> restaurantEntities = restaurantDao.restaurantsByName(restaurantName);
@@ -50,14 +50,14 @@ public class RestaurantService {
 
     public List<RestaurantEntity> restaurantByCategory(String categoryId) throws CategoryNotFoundException {
 
-        if(categoryId == null || categoryId == ""){
-            throw new CategoryNotFoundException("CNF-001","Category id field should not be empty");
+        if (categoryId == null || categoryId == "") {
+            throw new CategoryNotFoundException("CNF-001", "Category id field should not be empty");
         }
 
         CategoryEntity categoryEntity = categoryDao.getCategoryByUuid(categoryId);
 
-        if(categoryEntity == null){
-            throw new CategoryNotFoundException("CNF-002","No category by this id");
+        if (categoryEntity == null) {
+            throw new CategoryNotFoundException("CNF-002", "No category by this id");
         }
 
         List<RestaurantCategoryEntity> restaurantCategoryEntities = restaurantCategoryDao.getRestaurantByCategory(categoryEntity);
@@ -69,15 +69,15 @@ public class RestaurantService {
         return restaurantEntities;
     }
 
-    public RestaurantEntity restaurantByUUID(String restaurantUuid)throws RestaurantNotFoundException{
-        if(restaurantUuid == null||restaurantUuid == ""){
-            throw new RestaurantNotFoundException("RNF-002","Restaurant id field should not be empty");
+    public RestaurantEntity restaurantByUUID(String restaurantUuid) throws RestaurantNotFoundException {
+        if (restaurantUuid == null || restaurantUuid == "") {
+            throw new RestaurantNotFoundException("RNF-002", "Restaurant id field should not be empty");
         }
 
         RestaurantEntity restaurantEntity = restaurantDao.getRestaurantByUuid(restaurantUuid);
 
-        if (restaurantEntity == null){
-            throw new RestaurantNotFoundException("RNF-001","No restaurant by this id");
+        if (restaurantEntity == null) {
+            throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
         }
 
         return restaurantEntity;
@@ -85,15 +85,15 @@ public class RestaurantService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public RestaurantEntity updateRestaurantRating(RestaurantEntity restaurantEntity, Double customerRating) throws InvalidRatingException {
-        if(!utility.isValidCustomerRating(customerRating.toString())){
-            throw new InvalidRatingException("IRE-001","Restaurant should be in the range of 1 to 5");
+        if (!utility.isValidCustomerRating(customerRating.toString())) {
+            throw new InvalidRatingException("IRE-001", "Restaurant should be in the range of 1 to 5");
         }
         DecimalFormat format = new DecimalFormat("##.0");
         double restaurantRating = restaurantEntity.getCustomerRating();
         Integer restaurantNoOfCustomerRated = restaurantEntity.getNumberCustomersRated();
-        restaurantEntity.setNumberCustomersRated(restaurantNoOfCustomerRated+1);
+        restaurantEntity.setNumberCustomersRated(restaurantNoOfCustomerRated + 1);
 
-        double newCustomerRating = (restaurantRating*(restaurantNoOfCustomerRated.doubleValue())+customerRating)/restaurantEntity.getNumberCustomersRated();
+        double newCustomerRating = (restaurantRating * (restaurantNoOfCustomerRated.doubleValue()) + customerRating) / restaurantEntity.getNumberCustomersRated();
 
         restaurantEntity.setCustomerRating(Double.parseDouble(format.format(newCustomerRating)));
 
