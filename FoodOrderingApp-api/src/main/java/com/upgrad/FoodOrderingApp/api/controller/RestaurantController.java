@@ -45,6 +45,7 @@ public class RestaurantController {
      * Retrieve all the restaurants in order of their ratings and display the response in a JSON format with the corresponding HTTP status.
      * Within each restaurant, the list of categories should be displayed in a categories string in alphabetical order of their category name and items shouldn’t be displayed.
      */
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, path = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getAllRestaurants() {
         List<RestaurantEntity> restaurantEntities = restaurantService.restaurantsByRating();
@@ -60,6 +61,7 @@ public class RestaurantController {
      * @return list of restaurants by given restaurant name. If there are no restaurants by the name entered by the customer, return an empty list with corresponding HTTP status
      * @throws RestaurantNotFoundException when restaurant name field entered by the customer is empty
      */
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, path = "/name/{restaurant_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByName(@PathVariable(value = "restaurant_name") final String restaurantName) throws RestaurantNotFoundException {
 
@@ -83,6 +85,7 @@ public class RestaurantController {
      * @return all restaurants by given category id. If there are no restaurants under the category entered by the customer, return an empty list with corresponding HTTP status.
      * @throws CategoryNotFoundException if the category id field entered by the customer is empty or if there is no category by the uuid entered by the customer
      */
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, path = "/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByCategoryId(@PathVariable(value = "category_id") String categoryId) throws CategoryNotFoundException {
 
@@ -99,6 +102,7 @@ public class RestaurantController {
      * @return restaurant’s details
      * @throws RestaurantNotFoundException if the restaurant id field entered by the customer is empty or if there is no restaurant by the uuid entered by the customer
      */
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.GET, path = "/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantDetailsResponse> getRestaurantByRestaurantId(@PathVariable(value = "restaurant_id") final String restaurantUuid) throws RestaurantNotFoundException {
 
@@ -164,6 +168,7 @@ public class RestaurantController {
      * @throws RestaurantNotFoundException if the restaurant id field entered by the customer is empty or If there is no restaurant by the uuid entered by the customer
      * @throws InvalidRatingException If the customer rating field entered by the customer is empty or is not in the range of 1 to 5
      */
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.PUT, path = "/{restaurant_id}", params = "customer_rating", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@RequestHeader("authorization") final String authorization, @PathVariable(value = "restaurant_id") final String restaurantUuid, @RequestParam(value = "customer_rating") final Double customerRating) throws AuthorizationFailedException, RestaurantNotFoundException, InvalidRatingException {
 

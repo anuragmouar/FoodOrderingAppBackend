@@ -8,13 +8,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-//This Class represents the Address table in the DB.
+/**
+ * This Class represents the Address table in the DB.
+ */
 
 @Entity
-@Table (name = "address",uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
+@Table(name = "address", uniqueConstraints = { @UniqueConstraint(columnNames = { "uuid" }) })
 @NamedQueries({
 
-        @NamedQuery(name = "getAddressByUuid",query = "SELECT a from AddressEntity a where a.uuid = :uuid"),
+    @NamedQuery(name = "getAddressByUuid", query = "SELECT a from AddressEntity a where a.uuid = :uuid"),
 })
 public class AddressEntity implements Serializable {
 
@@ -52,12 +54,12 @@ public class AddressEntity implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StateEntity state;
 
-    public AddressEntity(){
+    public AddressEntity() {
     }
 
     public AddressEntity(String uuid, String flatBuilNo, String locality, String city, String pincode, StateEntity stateEntity) {
         this.uuid = uuid;
-        this.flatBuilNo =flatBuilNo;
+        this.flatBuilNo = flatBuilNo;
         this.locality = locality;
         this.city = city;
         this.pincode = pincode;

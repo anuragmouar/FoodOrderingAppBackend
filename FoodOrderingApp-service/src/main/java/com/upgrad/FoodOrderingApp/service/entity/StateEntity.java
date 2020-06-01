@@ -5,14 +5,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-//This Class represents the StateEntity table in the DB.
+/**
+ * This Class represents the StateEntity table in the DB.
+ */
 
 @Entity
-@Table(name = "state",uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
+@Table(name = "state", uniqueConstraints = { @UniqueConstraint(columnNames = { "uuid" }) })
 @NamedQueries({
 
-        @NamedQuery(name = "getStateByUuid", query = "SELECT s from StateEntity s where s.stateUuid = :uuid"),
-        @NamedQuery(name = "getAllStates",query = "SELECT s from StateEntity s"),
+    @NamedQuery(name = "getStateByUuid", query = "SELECT s from StateEntity s where s.stateUuid = :uuid"),
+    @NamedQuery(name = "getAllStates", query = "SELECT s from StateEntity s"),
 })
 public class StateEntity implements Serializable {
 
@@ -21,12 +23,10 @@ public class StateEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(name = "uuid")
     @Size(max = 200)
     @NotNull
     private String stateUuid;
-
 
     @Column(name = "state_name")
     @Size(max = 30)

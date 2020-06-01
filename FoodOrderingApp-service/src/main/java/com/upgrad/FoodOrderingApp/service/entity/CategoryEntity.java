@@ -7,14 +7,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-//This Class represents the Category table in the DB
+/**
+ * This Class represents the Category table in the DB
+ */
 
 @Entity
-@Table(name = "category",uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
+@Table(name = "category", uniqueConstraints = { @UniqueConstraint(columnNames = { "uuid" }) })
 @NamedQueries({
 
-        @NamedQuery(name = "getCategoryByUuid",query = "SELECT c FROM CategoryEntity c WHERE c.uuid = :uuid"),
-        @NamedQuery(name = "getAllCategoriesOrderedByName",query = "SELECT c FROM CategoryEntity c ORDER BY c.categoryName ASC "),
+    @NamedQuery(name = "getCategoryByUuid", query = "SELECT c FROM CategoryEntity c WHERE c.uuid = :uuid"),
+    @NamedQuery(name = "getAllCategoriesOrderedByName", query = "SELECT c FROM CategoryEntity c ORDER BY c.categoryName ASC "),
 })
 public class CategoryEntity implements Serializable {
 
@@ -35,7 +37,7 @@ public class CategoryEntity implements Serializable {
     //Created direct relation as the Test Mockito expects ListOf items as a variable in CategoryEntity.
     @ManyToMany
     @JoinTable(name = "category_item", joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id"))
+        inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<ItemEntity> items = new ArrayList<>();
 
     public Integer getId() {
